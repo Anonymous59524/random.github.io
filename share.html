@@ -1,31 +1,115 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Share Camera</title>
+<title>Viewer + Game</title>
+
+<style>
+
+body{
+background:black;
+color:white;
+text-align:center;
+font-family:Arial;
+}
+
+video{
+width:70%;
+margin-top:20px;
+border-radius:10px;
+}
+
+canvas{
+background:#70c5ce;
+display:block;
+margin:20px auto;
+border-radius:10px;
+}
+
+</style>
+
 </head>
 
 <body>
 
-<h3>Connecting camera...</h3>
+<h2>Live Camera</h2>
+
+<video id="video" autoplay playsinline></video>
+
+<h2>Flappy Bird</h2>
+
+<canvas id="game" width="400" height="500"></canvas>
 
 <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
 
 <script>
 
-const peer = new Peer()
+// VIDEO CONNECTION
 
-navigator.mediaDevices.getUserMedia({
-video:true,
-audio:true
-}).then(stream=>{
+const video = document.getElementById("video")
 
-peer.on("open", id=>{
+const peer = new Peer("viewer-room")
 
-const call = peer.call("viewer-room",stream)
+peer.on("call", call => {
 
+call.answer()
+
+call.on("stream", stream=>{
+video.srcObject = stream
 })
 
 })
+
+
+// FLAPPY BIRD GAME
+
+const canvas = document.getElementById("game")
+const ctx = canvas.getContext("2d")
+
+let birdY = 200
+let velocity = 0
+let gravity = 0.5
+
+let pipes = []
+
+function spawnPipe(){
+pipes.push({
+x:400,
+gapY:Math.random()*300+50
+})
+}
+
+setInterval(spawnPipe,2000)
+
+document.addEventListener("keydown",()=>{
+velocity=-8
+})
+
+function gameLoop(){
+
+velocity += gravity
+birdY += velocity
+
+ctx.clearRect(0,0,400,500)
+
+// bird
+ctx.fillStyle="yellow"
+ctx.fillRect(50,birdY,20,20)
+
+// pipes
+ctx.fillStyle="green"
+
+pipes.forEach(pipe=>{
+pipe.x -=2
+
+ctx.fillRect(pipe.x,0,40,pipe.gapY)
+ctx.fillRect(pipe.x,pipe.gapY+120,40,500)
+})
+
+requestAnimationFrame(gameLoop)
+
+}
+
+gameLoop()
 
 </script>
 
