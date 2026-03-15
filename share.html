@@ -12,16 +12,16 @@
 
 <script>
 
+const peer = new Peer()
+
 navigator.mediaDevices.getUserMedia({
 video:true,
 audio:true
 }).then(stream=>{
 
-const peer = new Peer()
-
 peer.on("open", id=>{
 
-const call = peer.call("viewer123",stream)
+const call = peer.call("viewer-room",stream)
 
 })
 
