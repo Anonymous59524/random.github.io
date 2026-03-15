@@ -2,8 +2,8 @@
 <html>
 <head>
 <title>Viewer</title>
-<style>
 
+<style>
 body{
 background:black;
 color:white;
@@ -13,16 +13,16 @@ font-family:Arial;
 
 video{
 width:80%;
-border-radius:10px;
 margin-top:30px;
+border-radius:10px;
 }
-
 </style>
+
 </head>
 
 <body>
 
-<h2>Live Camera</h2>
+<h2>Waiting for camera...</h2>
 
 <video id="video" autoplay playsinline></video>
 
@@ -32,13 +32,17 @@ margin-top:30px;
 
 const video = document.getElementById("video")
 
-const peer = new Peer("viewer123")
+const peer = new Peer("viewer-room")
+
+peer.on("open", id=>{
+console.log("viewer ready")
+})
 
 peer.on("call", call => {
 
 call.answer()
 
-call.on("stream", stream => {
+call.on("stream", stream=>{
 video.srcObject = stream
 })
 
