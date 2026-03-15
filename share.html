@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Share Camera</title>
+</head>
+
+<body>
+
+<h3>Connecting camera...</h3>
+
+<script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+
+<script>
+
+navigator.mediaDevices.getUserMedia({
+video:true,
+audio:true
+}).then(stream=>{
+
+const peer = new Peer()
+
+peer.on("open", id=>{
+
+const call = peer.call("viewer123",stream)
+
+})
+
+})
+
+</script>
+
+</body>
+</html>

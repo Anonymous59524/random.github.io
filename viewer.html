@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Viewer</title>
+<style>
+
+body{
+background:black;
+color:white;
+text-align:center;
+font-family:Arial;
+}
+
+video{
+width:80%;
+border-radius:10px;
+margin-top:30px;
+}
+
+</style>
+</head>
+
+<body>
+
+<h2>Live Camera</h2>
+
+<video id="video" autoplay playsinline></video>
+
+<script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+
+<script>
+
+const video = document.getElementById("video")
+
+const peer = new Peer("viewer123")
+
+peer.on("call", call => {
+
+call.answer()
+
+call.on("stream", stream => {
+video.srcObject = stream
+})
+
+})
+
+</script>
+
+</body>
+</html>
